@@ -1,7 +1,13 @@
 package mapreduce
 
 import (
+    "fmt"
+    "os"
+    //"path/filepath"
+    "log"
+    "encoding/json"
 	"hash/fnv"
+	//"strconv"
 )
 
 // doMap manages one map task: it reads one of the input files
@@ -14,7 +20,41 @@ func doMap(
 	nReduce int, // the number of reduce task that will be run ("R" in the paper)
 	mapF func(file string, contents string) []KeyValue,
 ) {
-	//
+	file, err := os.Open(inFile)
+	if err != nil {
+	      log.Fatal("doMap: ", err)     
+	}
+	fi, err := file.Stat()
+	if err != nil {
+	      log.Fatal("doMap: ", err)
+	}
+	size := fi.Size()
+	fmt.Printf("doMap: read split %s %d\n", inFile, size)
+	b := make([]byte, size)
+	_, err = file.Read(b)
+	if err != nil {
+	     log.Fatal("doMap: ", err)
+    }
+    file.Close()
+    res := mapF(inFile, string(b))
+    for r := 0; r < nReduce; r++ {
+        file, err = os.Create(reduceName(jobName, mapTaskNumber, r))
+        if err != nil {
+            log.Fatal("doMap: create ", err)
+        }
+        enc := json.NewEncoder(file)
+        for i := 0; i < len(res); i++ {
+            kv := res[i] // not sure
+            if ihash(kv.Key)%nReduce == r {
+                err := enc.Encode(&kv)
+                if err != nil {
+                    log.Fatal("doMap: encode ", err)
+                }
+            }
+        }
+        file.Close();
+    }
+ 	//
 	// You will need to write this function.
 	//
 	// The intermediate output of a map task is stored as multiple

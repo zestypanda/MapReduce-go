@@ -126,7 +126,7 @@ func Distributed(jobName string, files []string, nreduce int, master string) (mr
 // Once all the mappers have finished, workers are assigned reduce tasks.
 //
 // When all tasks have been completed, the reducer outputs are merged,
-// statistics are collected, and the master is shut down.
+// statistics are collected, and the master is down.
 //
 // Note that this implementation assumes a shared file system.
 func (mr *Master) run(jobName string, files []string, nreduce int,
