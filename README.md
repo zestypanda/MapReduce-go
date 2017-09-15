@@ -1,7 +1,7 @@
-# MapReduce-go
-Implement MapReduce in go
+# go
+Implement xxx in go
 
-Support multiple jobs to run sequentially or in parallel (using Go PRC to simulate distributed computation)
+Support multiple jobs to run sequentially or in parallel
 
 Handle worker failures
 
