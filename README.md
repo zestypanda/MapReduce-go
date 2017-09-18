@@ -1,5 +1,5 @@
 # go
-Implement xxx in go
+Build xxx in go
 
 Support multiple jobs to run sequentially or in parallel
 
