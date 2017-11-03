@@ -1,5 +1,5 @@
 # go
-Build xxx in go
+Implement MapReduce in go
 
 Support multiple jobs to run sequentially or in parallel
 
